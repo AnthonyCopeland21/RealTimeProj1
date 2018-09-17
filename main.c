@@ -12,6 +12,7 @@ char str[] = "Give Red LED control input (Y = On, N = off):\r\n";
 char str_echo[10];
 
 int main(void){
+	//POST should go first
 	//char rxByte;
 	int		a ;
 	int		n ;
