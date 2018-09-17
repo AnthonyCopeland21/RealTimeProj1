@@ -22,16 +22,7 @@ int main(void){
 	LED_Init();
 	UART2_Init();
 		
-	while (1){
-//		n = sprintf((char *)buffer, "a = %d\t", a);
-//		n += sprintf((char *)buffer + n, "b = %f\r\n", b);
-//		USART_Write(USART2, buffer, n);		
-//		a = a + 1;
-//		b = (float)a/100;
-		// now spin for a while to slow it down
-//		for (i = 0; i < 4000000; i++)
-//			;
-		
+	while (1){		
 		for (i = 0; i < 10; i++){
 			str_echo[i] = '\0';
 		}
