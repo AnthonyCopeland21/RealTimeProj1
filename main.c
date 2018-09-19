@@ -1,19 +1,23 @@
-#include "stm32l476xx.h"
-#include "SysClock.h"
-#include "LED.h"
-#include "UART.h"
+#include "startup.h"
 
 #include <string.h>
 #include <stdio.h>
 
+/*
 char rxByte = 0;
 uint8_t buffer[BufferSize];
 char str[] = "Give Red LED control input (Y = On, N = off):\r\n";
 char str_echo[10];
+*/
 
 int main(void){
 	//POST should go first
-	//char rxByte;
+	int retval = POST();
+	if (retval != PASS) {
+		//POST failed. Ask user if they want to try post again
+	}
+
+/*
 	int		a ;
 	int		n ;
 	int		i ;
@@ -40,15 +44,7 @@ int main(void){
 		
 		USART_Write(USART2, (uint8_t *)str_echo, strlen(str_echo));
 		USART_Write(USART2, (uint8_t *)"\r\n", 2);
-		//rxByte = USART_Read(USART2);
-//		if (rxByte == 'N' || rxByte == 'n'){
-//			Red_LED_Off();
-//			USART_Write(USART2, (uint8_t *)"LED is Off\r\n\r\n", 16);
-//		}
-//		else if (rxByte == 'Y' || rxByte == 'y'){
-//			Red_LED_On();
-//			USART_Write(USART2, (uint8_t *)"LED is on\r\n\r\n", 15);
-//		}
 	}
+*/
 }
 
