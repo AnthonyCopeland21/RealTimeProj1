@@ -6,9 +6,11 @@ void timer_startup(void) {
 	// use TIM2
 
 	//TIMER CONFIG
-	// ensure RCC->APB1ENR1 set to right timer
-	// load prescaler into TIM2->PSC register
-	// create an update event using the TIM2->EGR register
+	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN; 	// ensure RCC->APB1ENR1 set to right timer
+	TIM2->PSC = 0; 													// load prescaler into TIM2->PSC register. it will be
+																					// 80MHz divided by prescaler plus 1
+	TIM2->EGR |= TIM_EGR_CC1G;              // create an update event using the TIM2->EGR register
+																					//Try TIM_EGR_UG if this doesn't work
 	
 	// CAPTURE CONFIG
 	// setup TIM2 to capture mode using CCR
