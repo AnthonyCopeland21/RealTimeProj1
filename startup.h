@@ -12,6 +12,6 @@
 #define FAIL 0
 
 void timer_startup(void);
-int POST(void);
+int post(void);
 
 #endif // STARTUP_H

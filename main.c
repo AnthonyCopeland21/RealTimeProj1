@@ -12,10 +12,10 @@ char str_echo[10];
 
 int main(void){
 	//POST should go first
-	int retval = POST();
+	int retval = post();
 	if (retval != PASS) {
 		//POST failed. Ask user if they want to try post again
-		
+
 	}
 
 /*
