@@ -14,6 +14,7 @@ void timer_startup(void) {
 	
 	// CAPTURE CONFIG
 	// setup TIM2 to capture mode using CCR
+	TIM2->CCR1 = 0; //check this
 	// turn off output enable in TIM2->CCER
 	// setup CCMR2 for desired capture channel with cleared input event filter
 	// Set enable bit for input channel
@@ -31,6 +32,7 @@ int post(void) {
 	LED_Init();
 	UART2_Init();
 	timer_startup();
+	return retval;
 	// check GPIO, should see pulse within 100ms of startup
 	// wait 100ms, return failure if no signal
 }

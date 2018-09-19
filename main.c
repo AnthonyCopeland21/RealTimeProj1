@@ -15,7 +15,6 @@ int main(void){
 	int retval = post();
 	if (retval != PASS) {
 		//POST failed. Ask user if they want to try post again
-
 	}
 
 /*
