@@ -3,6 +3,6 @@
 
 #include "startup.h"
 
-void capture_data(void);
+int capture_data(void);
 
 #endif // CAPTUREDATA_H
