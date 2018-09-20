@@ -14,7 +14,15 @@ void timer_startup(void) {
 	
 	// CAPTURE CONFIG
 	// setup TIM2 to capture mode using CCR
-	TIM2->CCR1 = 0; //check this
+	
+	TIM2->CCER  &= ~0xFFFF;          //Disables the input enable by clearing register
+	TIM2->CCMR1 &= ~0xFFFF;					 //Clear CCMR1 register
+	TIM2->CCMR1 |= TIM_CCMR1_IC1F_0; //Set filter to 1st setting on page 909
+	TIM2->CCMR1 |= TIM_CCMR1_CC1S_0; //Set CC1 channel as input
+	TIM2->CCER  |= TIM_CCER_CC1E;    //Re-enables input enable
+	TIM2->CR1   |= TIM_CR1_CEN;      //Starts Counter
+	
+	
 	// turn off output enable in TIM2->CCER
 	// setup CCMR2 for desired capture channel with cleared input event filter
 	// Set enable bit for input channel
