@@ -2,6 +2,7 @@
 #define CAPTUREDATA_H
 
 #include "startup.h"
+#include <stdio.h>
 
 int capture_data(void);
 
