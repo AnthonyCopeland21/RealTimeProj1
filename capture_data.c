@@ -11,6 +11,7 @@ int capture_data(void) {
 	while (i < 101){
 		// TIM_SR_CC1IF
 		if ((TIM2->SR & TIM_SR_CC1IF) == TIM_SR_CC1IF){
+			USART_Write(USART2, (uint8_t *)"Data\n\r\n", 6);
 			//take capture data from TIM2->CCR1
 			if (first != 0){
 				data[i] = TIM2->CCR1 - ref;
