@@ -1,6 +1,9 @@
 #ifndef STARTUP_H
 #define STARTUP_H
 
+#include <string.h>
+#include <stdio.h>
+
 #include "capture_data.h"
 #include "LED.h"
 #include "stm32l476xx.h"
@@ -11,7 +14,8 @@
 #define PASS 1
 #define FAIL 0
 
-void timer_startup(void);
 int post(void);
+int start(void);
+void timer_startup(void);
 
 #endif // STARTUP_H

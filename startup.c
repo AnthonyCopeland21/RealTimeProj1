@@ -1,5 +1,45 @@
 #include "startup.h"
 
+int post(void) {
+	int retval = FAIL;
+	System_Clock_Init();
+	LED_Init();
+	UART2_Init();
+	timer_startup();
+	// check GPIO, should see pulse within 100ms of startup
+	// wait 100ms, return failure if no signal
+	retval = PASS;
+	return retval;
+}
+
+int start(void){
+	//retval is the return value for pass/fail of the current function
+	int retval = FAIL;
+	char rxByte = 0;
+	if (PASS != post()) {
+		//post fails. user chooses what to do next
+		USART_Write(USART2, (uint8_t *)"Post failed. Try again?(y/n)\n\r\n", 30);
+		char rxByte = USART_Read(USART2);
+		if (rxByte == 'y') {
+			if (PASS != post()){
+				USART_Write(USART2, (uint8_t *)"Failed. Goodbye!\n\r\n", 17);
+				goto failout;
+			}
+		}
+		else {
+			USART_Write(USART2, (uint8_t *)"Goodbye!\n\r\n", 10);
+			goto failout;
+		}
+	}
+	//data aquisition
+	capture_data();
+	//print data
+	print_data();
+	retval = PASS;
+failout:
+	return retval;
+}
+
 // setup timers for captures
 void timer_startup(void) {
 	// setup timer values
@@ -32,15 +72,4 @@ void timer_startup(void) {
 	// TIM_SR_CCxIF will be set in TIM2->SR when capture ocurs
 	// reading captured counter value from TIM2->CCRx will clear IF bit in SR
 
-}
-
-int post(void) {
-	int retval = FAIL;
-	System_Clock_Init();
-	LED_Init();
-	UART2_Init();
-	timer_startup();
-	return retval;
-	// check GPIO, should see pulse within 100ms of startup
-	// wait 100ms, return failure if no signal
 }

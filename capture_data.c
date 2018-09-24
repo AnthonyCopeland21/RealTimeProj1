@@ -1,7 +1,7 @@
 #include "capture_data.h"
 
 int data[101];
-uint8_t buffer[BufferSize];
+//uint8_t buffer[BufferSize];
 
 int capture_data(void) {
 	int i = 0;
@@ -14,6 +14,7 @@ int capture_data(void) {
 			if (first != 0){
 				data[i] = TIM2->CCR1 - ref;
 				ref = data[i];
+				data[i] = convert_to_time(data[i]);
 				i++;
 			}
 			// if first data point collected, set as reference
@@ -23,19 +24,22 @@ int capture_data(void) {
 			}
 		}
 	}
-	//print out data points that aren't set to 0
 	return PASS;
+}
+
+int convert_to_time(int data_point) {
+	return (data_point * (1 / 80000000));
 }
 
 void print_data(void) {
 	int i;
-	char out[10];
+	char out[12];
 	for (i = 0; i < 101; i++) {
 		//if data point is not 0
 		if (data[i] != 0){
 			//then print out the value
-			sprintf((char *)out, "%d %d", i, data[i]);
-			USART_Write(USART2, (uint8_t *)"\n\r\n",10);
+			sprintf((char *)out, "%d %d\n\r\n", i, data[i]);
+			USART_Write(USART2, (uint8_t *)out, 12);
 		}
 	}
 }
