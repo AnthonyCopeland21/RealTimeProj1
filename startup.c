@@ -2,10 +2,6 @@
 
 int post(void) {
 	int retval = FAIL;
-	System_Clock_Init();
-	LED_Init();
-	UART2_Init();
-	timer_startup();
 	// check GPIO, should see pulse within 100ms of startup
 	// wait 100ms, return failure if no signal
 
@@ -14,7 +10,15 @@ int post(void) {
 }
 
 int start(void){
+	
+	System_Clock_Init();
+	LED_Init();
+	UART2_Init();
+	timer_startup();
+	input_setup();
+	
 	//retval is the return value for pass/fail of the current function
+	
 	int retval = FAIL;
 	char rxByte = 0;
 	if (PASS != post()) {
@@ -71,4 +75,12 @@ void timer_startup(void) {
 	// TIM_SR_CCxIF will be set in TIM2->SR when capture ocurs
 	// reading captured counter value from TIM2->CCRx will clear IF bit in SR
 
+}
+
+void input_setup(void) {
+	
+	GPIOA->MODER   &= ~(0xF << (2*0));	// Clear bits
+	GPIOA->MODER   |=   0xA << (2*0);      		
+	GPIOA->AFR[0]  |=   0x1 << (2*0);      	
+	
 }
