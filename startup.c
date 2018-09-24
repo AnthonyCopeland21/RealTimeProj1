@@ -8,6 +8,7 @@ int post(void) {
 	timer_startup();
 	// check GPIO, should see pulse within 100ms of startup
 	// wait 100ms, return failure if no signal
+
 	retval = PASS;
 	return retval;
 }
@@ -33,8 +34,6 @@ int start(void){
 	}
 	//data aquisition
 	capture_data();
-	//print data
-	print_data();
 	retval = PASS;
 failout:
 	return retval;

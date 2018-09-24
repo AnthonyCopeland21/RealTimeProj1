@@ -1,10 +1,11 @@
 #include "capture_data.h"
 
-int data[101];
 //uint8_t buffer[BufferSize];
 
 int capture_data(void) {
 	int i = 0;
+	int *data;
+	data = malloc(101);
 	int ref = 0;
 	int first = 0;
 	while (i < 101){
@@ -24,6 +25,9 @@ int capture_data(void) {
 			}
 		}
 	}
+	//print data
+	print_data(data);
+	free(data);
 	return PASS;
 }
 
@@ -31,7 +35,7 @@ int convert_to_time(int data_point) {
 	return (data_point * (1 / 80000000));
 }
 
-void print_data(void) {
+void print_data(int *data) {
 	int i;
 	char out[12];
 	for (i = 0; i < 101; i++) {

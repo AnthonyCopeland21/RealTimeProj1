@@ -7,7 +7,8 @@
 
 int capture_data(void);
 int convert_to_time(int data_point);
-void print_data(void);
+int get_data();
+void print_data(int *data);
 
 
 #endif // CAPTUREDATA_H
