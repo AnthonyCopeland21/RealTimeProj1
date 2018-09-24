@@ -52,7 +52,7 @@ void timer_startup(void) {
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN; 	// ensure RCC->APB1ENR1 set to right timer
 	TIM2->PSC = 0; 													// load prescaler into TIM2->PSC register. it will be
 																					// 80MHz divided by prescaler plus 1
-	TIM2->EGR |= TIM_EGR_CC1G;              // create an update event using the TIM2->EGR register
+	TIM2->EGR |= TIM_EGR_UG;              // create an update event using the TIM2->EGR register
 																					//Try TIM_EGR_UG if this doesn't work
 	
 	// CAPTURE CONFIG
@@ -74,13 +74,16 @@ void timer_startup(void) {
 	// TIM2->CCRx will be loaded with timer count when capture occurs
 	// TIM_SR_CCxIF will be set in TIM2->SR when capture ocurs
 	// reading captured counter value from TIM2->CCRx will clear IF bit in SR
+  // Clear bits
 
 }
 
 void input_setup(void) {
 	
-	GPIOA->MODER   &= ~(0xF << (2*0));	// Clear bits
-	GPIOA->MODER   |=   0xA << (2*0);      		
-	GPIOA->AFR[0]  |=   0x1 << (2*0);      	
+	RCC->AHB2ENR |=   RCC_AHB2ENR_GPIOAEN; //Enable GPIOA
+	
+	GPIOA->MODER   &= ~(0xF << (2*0));     //Set desired values to tie PA0
+	GPIOA->MODER   |=   0xA << (2*0);      //as an input tied to TIM2_CH1
+	GPIOA->AFR[0]  |=   0x11 << (4*1);      	
 	
 }
