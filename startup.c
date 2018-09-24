@@ -20,7 +20,7 @@ int start(void){
 	if (PASS != post()) {
 		//post fails. user chooses what to do next
 		USART_Write(USART2, (uint8_t *)"Post failed. Try again?(y/n)\n\r\n", 30);
-		char rxByte = USART_Read(USART2);
+		rxByte = USART_Read(USART2);
 		if (rxByte == 'y') {
 			if (PASS != post()){
 				USART_Write(USART2, (uint8_t *)"Failed. Goodbye!\n\r\n", 17);

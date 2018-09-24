@@ -6,7 +6,6 @@ uint8_t buffer[BufferSize];
 char str[] = "Give Red LED control input (Y = On, N = off):\r\n";
 char str_echo[10];
 */
-
 int main(void){
 	return start();
 /*
