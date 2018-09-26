@@ -20,8 +20,9 @@ int capture_data(void) {
 			if (first != 0){
 				data[i] = TIM2->CCR1 - ref;
 				ref = data[i];
+				USART_Write(USART2, (uint8_t *)ref, 10);
 				data[i] = convert_to_time(data[i]);
-				USART_Write(USART2, (uint8_t *)data[i], 10);
+				//USART_Write(USART2, (uint8_t *)data[i], 10);
 				USART_Write(USART2, (uint8_t *)"\n\r\n",2);
 				i++;
 			}
