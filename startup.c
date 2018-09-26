@@ -80,10 +80,13 @@ void timer_startup(void) {
 
 void input_setup(void) {
 	
-	RCC->AHB2ENR |=   RCC_AHB2ENR_GPIOAEN; //Enable GPIOA
+	RCC->AHB2ENR   |=   RCC_AHB2ENR_GPIOAEN; //Enable GPIOA
 	
-	GPIOA->MODER   &= ~(0xF << (2*0));     //Set desired values to tie PA0
+	GPIOA->MODER 	 &=   ~3 ;										// clear out bits 0 and 1 for PA0
+	
+	GPIOA->MODER   &=   ~(0xF << (2*0));     //Set desired values to tie PA0
 	GPIOA->MODER   |=   0xA << (2*0);      //as an input tied to TIM2_CH1
-	GPIOA->AFR[0]  |=   0x11 << (4*1);      	
+	GPIOA->AFR[0]  |=   0x11 << (4*1);  	
+	GPIOA->PUPDR   |=   0x2 << (2*0);
 	
 }
