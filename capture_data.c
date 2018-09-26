@@ -6,6 +6,10 @@ int capture_data(void) {
 	int i = 0;
 	int *data;
 	data = malloc(101);
+	for(i = 0; i<101; i++){
+		data[i] = 0;
+	}
+	i = 0;
 	int ref = 0;
 	int first = 0;
 	while (i < 101){
@@ -44,7 +48,7 @@ void print_data(int *data) {
 		if (data[i] != 0){
 			//then print out the value
 			sprintf((char *)out, "%d %d\n\r\n", i, data[i]);
-			USART_Write(USART2, (uint8_t *)out, 12);
+			USART_Write(USART2, (uint8_t *)out, strlen(out));
 		}
 	}
 }
