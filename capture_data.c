@@ -4,8 +4,8 @@
 
 int capture_data(void) {
 	int i = 0;
-	int *data;
-	data = (int *)(malloc(101*sizeof(int)));
+	uint32_t *data;
+	data = (uint32_t *)malloc(101*sizeof(uint32_t));
 	for(i = 0; i < 101; i++) {
 		data[i] = 0;
 	}
@@ -13,7 +13,7 @@ int capture_data(void) {
 	USART_Write(USART2, (uint8_t *)data[0],10);
 	USART_Write(USART2, (uint8_t *)"\n\r\n",3);
 	i = 0;
-	int ref = 0;
+	uint32_t ref = 0;
 	int first = 0;
 	while (i < 101){
 		// TIM_SR_CC1IF
@@ -21,7 +21,7 @@ int capture_data(void) {
 			//USART_Write(USART2, (uint8_t *)"Data\n\r\n", 6);
 			//take capture data from TIM2->CCR1
 			if (first != 0){
-				data[i] = (int)TIM2->CCR1 - ref;
+				data[i] = TIM2->CCR1 - ref;
 				ref = data[i];
 				USART_Write(USART2, (uint8_t *)data[i], 10);
 				data[i] = data[i] * (1 / 10000);
@@ -32,7 +32,7 @@ int capture_data(void) {
 			// if first data point collected, set as reference
 			else {
 				first = 1;
-				ref = (int)TIM2->CCR1;
+				ref = TIM2->CCR1;
 			}
 		}
 	}
