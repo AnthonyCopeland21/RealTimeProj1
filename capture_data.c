@@ -5,10 +5,11 @@
 int capture_data(void) {
 	int i = 0;
 	int *data;
-	data = malloc(101);
-	for(i = 0; i < 101; i++){
+	data = (int *)(malloc(101*sizeof(int)));
+	for(i = 0; i < 101; i++) {
 		data[i] = 0;
 	}
+	//data[0] represents 50 less than the freq
 	USART_Write(USART2, (uint8_t *)data[0],10);
 	USART_Write(USART2, (uint8_t *)"\n\r\n",3);
 	i = 0;
