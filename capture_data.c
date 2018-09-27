@@ -4,13 +4,13 @@
 
 int capture_data(void) {
 	int i = 0;
-	uint32_t *data;
+	uint16_t *data;
 	data = malloc(101);
-	for(i = 0; i<101; i++){
+	for(i = 0; i < 101; i++){
 		data[i] = 0;
 	}
 	i = 0;
-	uint32_t ref = 0;
+	uint16_t ref = 0;
 	int first = 0;
 	while (i < 101){
 		// TIM_SR_CC1IF
@@ -20,8 +20,8 @@ int capture_data(void) {
 			if (first != 0){
 				data[i] = TIM2->CCR1 - ref;
 				ref = data[i];
-				USART_Write(USART2, (uint8_t *)ref, 8);
-				data[i] = data[i] * (1/80000000);
+				USART_Write(USART2, (uint8_t *)data[i], 10);
+				data[i] = data[i] * (1 / 80000000);
 				//USART_Write(USART2, (uint8_t *)data[i], 10);
 				USART_Write(USART2, (uint8_t *)"\n\r\n",2);
 				i++;
