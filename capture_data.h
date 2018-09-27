@@ -4,8 +4,6 @@
 #include "startup.h"
 #include <stdio.h>
 
-
-int capture_data(void);
-
+int capture_data(int freq);
 
 #endif // CAPTUREDATA_H

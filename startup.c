@@ -1,16 +1,17 @@
 #include "startup.h"
 
+//This will still need work. I unplugged the PA0 and it didn't fail out
 int post(void) {
-	int retval = FAIL;
-	// check GPIO, should see pulse within 100ms of startup
-	// wait 100ms, return failure if no signal
-
-	retval = PASS;
-	return retval;
+	while (TIM2->CCR1 < 8000000){
+		if ((TIM2->SR & TIM_SR_CC1IF) == TIM_SR_CC1IF){
+			return PASS;
+		}
+	}
+	return FAIL;
 }
 
 int start(void){
-	
+	uint8_t buffer[BufferSize];
 	System_Clock_Init();
 	LED_Init();
 	UART2_Init();
@@ -18,13 +19,18 @@ int start(void){
 	input_setup();
 	
 	//retval is the return value for pass/fail of the current function
-	
 	int retval = FAIL;
+	int user_value = '\0';
 	char rxByte = 0;
+	uint8_t new_buffer[BufferSize];
+	char str[10];
+	int i = 0;
 	if (PASS != post()) {
 		//post fails. user chooses what to do next
 		USART_Write(USART2, (uint8_t *)"Post failed. Try again?(y/n)\n\r\n", 30);
 		rxByte = USART_Read(USART2);
+		sprintf((char *)buffer, "%c\n\r\n", rxByte);
+		USART_Write(USART2, buffer, sizeof(buffer)/sizeof(uint8_t));
 		if (rxByte == 'y' || rxByte == 'Y') {
 			if (PASS != post()){
 				USART_Write(USART2, (uint8_t *)"Failed. Goodbye!\n\r\n", 17);
@@ -36,8 +42,27 @@ int start(void){
 			goto failout;
 		}
 	}
+	//ask user for input frequency
+	sprintf((char *)buffer, "Please enter the frequency: ");
+	USART_Write(USART2, buffer, sizeof(buffer)/sizeof(uint8_t));
+	//this loop is intended to let the user see what they're typing
+	rxByte = '\0';
+	while(rxByte != '\r'){
+		rxByte = USART_Read(USART2);
+		sprintf((char *)new_buffer, "%c", rxByte);
+		USART_Write(USART2, new_buffer, sizeof(new_buffer)/sizeof(uint8_t));
+		str[i] = rxByte;
+		i++;
+	}
+	user_value = atoi(str);
+	for(i = 0; i < strlen((char *)buffer); i++){
+		buffer[i] = '\0';
+	}
+	sprintf((char *)buffer, "\n\r");
+	USART_Write(USART2, buffer, sizeof(buffer)/sizeof(uint8_t));
 	//data aquisition
-	capture_data();
+	capture_data(user_value);
+	
 	retval = PASS;
 failout:
 	return retval;
@@ -50,7 +75,7 @@ void timer_startup(void) {
 
 	//TIMER CONFIG
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN; 	// ensure RCC->APB1ENR1 set to right timer
-	TIM2->PSC = 7999; 											// load prescaler into TIM2->PSC register. it will be
+	TIM2->PSC = 0; 											// load prescaler into TIM2->PSC register. it will be
 																					// 80MHz divided by prescaler plus 1
 	TIM2->EGR |= TIM_EGR_UG;              // create an update event using the TIM2->EGR register
 																					//Try TIM_EGR_UG if this doesn't work

@@ -1,32 +1,32 @@
 #include "capture_data.h"
 
-//uint8_t buffer[BufferSize];
-
-int capture_data(void) {
+int capture_data(int freq) {
+	int freq_index_ref = freq - 50;
+	uint8_t buffer[BufferSize];
 	int i = 0;
-	uint32_t *data;
-	data = (uint32_t *)malloc(101*sizeof(uint32_t));
-	for(i = 0; i < 101; i++) {
-		data[i] = 0;
-	}
-	//data[0] represents 50 less than the freq
-	USART_Write(USART2, (uint8_t *)data[0],10);
-	USART_Write(USART2, (uint8_t *)"\n\r\n",3);
-	i = 0;
+	int *data;
 	uint32_t ref = 0;
+	uint32_t data_point = 0;
 	int first = 0;
+	int variable_index = 0;
+	data = (int *)malloc(101*sizeof(int));
+	for(int j = 0; j < 101; j++) {
+		data[j] = 0;
+	}
 	while (i < 101){
 		// TIM_SR_CC1IF
 		if ((TIM2->SR & TIM_SR_CC1IF) == TIM_SR_CC1IF){
 			//USART_Write(USART2, (uint8_t *)"Data\n\r\n", 6);
 			//take capture data from TIM2->CCR1
 			if (first != 0){
-				data[i] = TIM2->CCR1 - ref;
-				ref = data[i];
-				USART_Write(USART2, (uint8_t *)data[i], 10);
-				data[i] = data[i] * (1 / 10000);
-				//USART_Write(USART2, (uint8_t *)data[i], 10);
-				USART_Write(USART2, (uint8_t *)"\n\r\n",2);
+				data_point = TIM2->CCR1;
+				variable_index = (int)(data_point-ref)/2600 - freq_index_ref;
+				sprintf((char *)buffer, "%d %d\n\r",i,variable_index);
+				USART_Write(USART2, buffer, sizeof(buffer)/sizeof(uint8_t));
+				ref = data_point;
+				if(variable_index > -1 && variable_index <= 100){
+					data[variable_index] += 1;
+				}
 				i++;
 			}
 			// if first data point collected, set as reference
@@ -37,15 +37,12 @@ int capture_data(void) {
 		}
 	}
 	//print data
-	//char out[12];
-	/*for (i = 0; i < 101; i++) {
-		//if data point is not 0
+	for (i = 0; i < 101; i++) {
 		if (data[i] != 0){
-			//then print out the value
-			sprintf((char *)out, "%d %d\n\r\n", i, data[i]);
-			USART_Write(USART2, (uint8_t *)out, strlen(out));
+			sprintf((char *)buffer, "%d %d %d %d\n\r\n", i, freq_index_ref, (i+freq_index_ref), data[i+freq_index_ref]);
+			USART_Write(USART2, (uint8_t *)buffer, sizeof(buffer)/sizeof(uint8_t));
 		}
-	}	*/
+	}
 	
 	free(data);
 	return PASS;
