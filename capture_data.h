@@ -6,8 +6,6 @@
 
 
 int capture_data(void);
-uint32_t convert_to_time(uint32_t data_point);
-void print_data(uint32_t *data);
 
 
 #endif // CAPTUREDATA_H

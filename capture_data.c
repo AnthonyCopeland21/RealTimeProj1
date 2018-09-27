@@ -21,7 +21,7 @@ int capture_data(void) {
 				data[i] = TIM2->CCR1 - ref;
 				ref = data[i];
 				USART_Write(USART2, (uint8_t *)ref, 8);
-				data[i] = convert_to_time(data[i]);
+				data[i] = data[i] * (1/80000000);
 				//USART_Write(USART2, (uint8_t *)data[i], 10);
 				USART_Write(USART2, (uint8_t *)"\n\r\n",2);
 				i++;
@@ -34,24 +34,16 @@ int capture_data(void) {
 		}
 	}
 	//print data
-	print_data(data);
+		char out[12];
+		for (i = 0; i < 101; i++) {
+			//if data point is not 0
+			if (data[i] != 0){
+				//then print out the value
+				sprintf((char *)out, "%d %d\n\r\n", i, data[i]);
+				USART_Write(USART2, (uint8_t *)out, strlen(out));
+			}
+		}	
+	
 	free(data);
 	return PASS;
-}
-
-uint32_t convert_to_time(uint32_t data_point) {
-	return (data_point * (1 / 80000000));
-}
-
-void print_data(uint32_t *data) {
-	int i;
-	char out[12];
-	for (i = 0; i < 101; i++) {
-		//if data point is not 0
-		if (data[i] != 0){
-			//then print out the value
-			sprintf((char *)out, "%d %d\n\r\n", i, data[i]);
-			USART_Write(USART2, (uint8_t *)out, strlen(out));
-		}
-	}
 }
