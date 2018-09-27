@@ -21,7 +21,7 @@ int capture_data(void) {
 				data[i] = TIM2->CCR1 - ref;
 				ref = data[i];
 				USART_Write(USART2, (uint8_t *)data[i], 10);
-				data[i] = data[i] * (1 / 80000000);
+				data[i] = data[i] * (1 / 10000);
 				//USART_Write(USART2, (uint8_t *)data[i], 10);
 				USART_Write(USART2, (uint8_t *)"\n\r\n",2);
 				i++;
