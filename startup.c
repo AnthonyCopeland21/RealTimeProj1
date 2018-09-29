@@ -58,8 +58,8 @@ int start(void){
 	for(i = 0; i < strlen((char *)buffer); i++){
 		buffer[i] = '\0';
 	}
-	sprintf((char *)buffer, "\n\r");
-	USART_Write(USART2, buffer, sizeof(buffer)/sizeof(uint8_t));
+	//sprintf((char *)buffer, "\n\r\n");
+	USART_Write(USART2, (uint8_t *)"\n\r\n", 4);
 	//data aquisition
 	capture_data(user_value);
 	
