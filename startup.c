@@ -75,7 +75,7 @@ void timer_startup(void) {
 
 	//TIMER CONFIG
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN; 	// ensure RCC->APB1ENR1 set to right timer
-	TIM2->PSC = 0; 											// load prescaler into TIM2->PSC register. it will be
+	TIM2->PSC = 127; 											// load prescaler into TIM2->PSC register. it will be
 																					// 80MHz divided by prescaler plus 1
 	TIM2->EGR |= TIM_EGR_UG;              // create an update event using the TIM2->EGR register
 																					//Try TIM_EGR_UG if this doesn't work
@@ -85,8 +85,9 @@ void timer_startup(void) {
 	
 	TIM2->CCER  &= ~0xFFFF;          //Disables the input enable by clearing register
 	TIM2->CCMR1 &= ~0xFFFF;					 //Clear CCMR1 register
-	TIM2->CCMR1 |= TIM_CCMR1_IC1F_0; //Set filter to 1st setting on page 909
+	TIM2->CCMR1 &= ~TIM_CCMR1_IC1F; //Set filter to 1st setting on page 909
 	TIM2->CCMR1 |= TIM_CCMR1_CC1S_0; //Set CC1 channel as input
+	TIM2->CCMR1 &= ~TIM_CCMR1_IC1PSC;
 	TIM2->CCER  |= TIM_CCER_CC1E;    //Re-enables input enable
 	TIM2->CR1   |= TIM_CR1_CEN;      //Starts Counter
 	
