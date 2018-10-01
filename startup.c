@@ -20,8 +20,8 @@ int post(void) {
 // Output: 		PASS/FAIL returned.
 //				UART output
 int start(void) {
-	//intiialization and setup functions
-	System_Clock_Init();
+	//intialization and setup functions
+
 	LED_Init();
 	UART2_Init();
 	timer_startup();

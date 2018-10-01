@@ -4,5 +4,9 @@
 // Input: 		none
 // Output: 		PASS/FAIL returned
 int main(void){
-	return start();
+	// Infinite loop for everything
+	System_Clock_Init();
+	while(1) {
+		start();
+	}
 }

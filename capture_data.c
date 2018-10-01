@@ -43,5 +43,8 @@ int capture_data(int freq) {
 			USART_Write(USART2, buffer, 11);
 		}
 	}
+	// Turn off and clear timer/counter. This is needed for POST to work during continuous loop
+	TIM2->CR1   &= ~TIM_CR1_CEN;      //Stop Counter
+	TIM2->CNT		 = 0;			  //Reset Count
 	return PASS;
 }
