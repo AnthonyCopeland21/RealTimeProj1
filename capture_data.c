@@ -1,5 +1,9 @@
 #include "capture_data.h"
 
+// Purpose: 	Capture and print out data
+// Input: 		freq - input lower limit from user or default
+// Output: 		PASS/FAIL returned.
+//				UART output
 int capture_data(int freq) {
 	int i = 0;
 	int first = 0;

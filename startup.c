@@ -1,8 +1,11 @@
 #include "startup.h"
 
+// Purpose: 	Checks to ensure input is recieved
+// Input: 		none
+// Output: 		PASS/FAIL returned
 int post(void) {
-	while (TIM2->CNT < 8000000){
-		if ((TIM2->SR & TIM_SR_CC1IF) == TIM_SR_CC1IF){
+	while (TIM2->CNT < 8000000) {
+		if ((TIM2->SR & TIM_SR_CC1IF) == TIM_SR_CC1IF) {
 			return PASS;
 		}
 	}
@@ -11,6 +14,10 @@ int post(void) {
 	return FAIL;
 }
 
+// Purpose: 	start of program and intialization
+// Input: 		none
+// Output: 		PASS/FAIL returned.
+//				UART output
 int start(void) {
 	//intiialization and setup functions
 	System_Clock_Init();
@@ -32,7 +39,7 @@ int start(void) {
 		USART_Write(USART2, buffer, 4);
 		if (rxByte == 'y' || rxByte == 'Y') {
 			timer_startup();
-			if (PASS != post()){
+			if (PASS != post()) {
 				USART_Write(USART2, (uint8_t *)"Failed again. Goodbye!\n\r", 24);
 				return FAIL;
 			}
@@ -48,7 +55,7 @@ int start(void) {
 	USART_Write(USART2, buffer, 4);
 	if (rxByte == 'y' || rxByte == 'Y') {
 		USART_Write(USART2, (uint8_t *)"New lower limit: ",17);
-		while(rxByte != '\r'){
+		while(rxByte != '\r') {
 			rxByte = USART_Read(USART2);
 			sprintf((char *)new_buffer, "%c", rxByte);
 			USART_Write(USART2, new_buffer, BufferSize);
@@ -70,7 +77,9 @@ int start(void) {
 	return PASS;
 }
 
-// setup timers for captures
+// Purpose: 	setup of TIM2 for capture
+// Input: 		none
+// Output: 		none
 void timer_startup(void) {
 	RCC->APB1ENR1 |= RCC_APB1ENR1_TIM2EN; 	// ensure RCC->APB1ENR1 set to right timer
 	
@@ -85,6 +94,9 @@ void timer_startup(void) {
 	TIM2->CR1   |= TIM_CR1_CEN;      		//Starts Counter
 }
 
+// Purpose: 	setup GPIOA for input
+// Input: 		nnone
+// Output: 		none
 void input_setup(void) {
 	RCC->AHB2ENR   |=   RCC_AHB2ENR_GPIOAEN; //Enable GPIOA
 	
@@ -94,5 +106,4 @@ void input_setup(void) {
 	GPIOA->AFR[0] &= ~(0x0000000F);
 	GPIOA->AFR[0] |= 0x00000001;
 	GPIOA->PUPDR   |=   0x2 << (2*0);
-	
 }
