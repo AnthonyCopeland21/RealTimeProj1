@@ -4,6 +4,7 @@
 // Input: 		none
 // Output: 		PASS/FAIL returned
 int post(void) {
+	// Waiting for input to be sensed or time to run out
 	while (TIM2->CNT < 8000000) {
 		if ((TIM2->SR & TIM_SR_CC1IF) == TIM_SR_CC1IF) {
 			return PASS;
@@ -55,6 +56,7 @@ int start(void) {
 	USART_Write(USART2, buffer, 4);
 	if (rxByte == 'y' || rxByte == 'Y') {
 		USART_Write(USART2, (uint8_t *)"New lower limit: ",17);
+		// Waits for user to press enter
 		while(rxByte != '\r') {
 			rxByte = USART_Read(USART2);
 			sprintf((char *)new_buffer, "%c", rxByte);
@@ -65,6 +67,7 @@ int start(void) {
 		user_value = atoi(str);
 		sprintf((char *)buffer, "\n\rNew upper limit: %d\n\r", user_value + 100);
 		USART_Write(USART2, buffer, 23);
+		// Clears buffer
 		for(i = 0; i < strlen((char *)buffer); i++) {
 			buffer[i] = '\0';
 		}

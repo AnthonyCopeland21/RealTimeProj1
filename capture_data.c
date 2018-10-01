@@ -12,9 +12,11 @@ int capture_data(int freq) {
 	uint8_t buffer[BufferSize];
 	uint32_t ref = 0;
 	uint32_t data_point = 0;
+	// Clear each element of the data array
 	for(int j = 0; j < 101; j++) {
 		data[j] = 0;
 	}
+	// Looping for all 1000 data points collected
 	while (i < 1000) {
 		// TIM_SR_CC1IF
 		if ((TIM2->SR & TIM_SR_CC1IF) == TIM_SR_CC1IF) {
@@ -34,7 +36,7 @@ int capture_data(int freq) {
 			}
 		}
 	}
-	//print data
+	// Cycle through data array, printing non-zero values
 	for (i = 0; i < 101; i++) {
 		if(data[i] != 0) {
 			sprintf((char *)buffer, "%d %d\n\r", (i+freq), data[i]);
